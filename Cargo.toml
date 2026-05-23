@@ -2,6 +2,7 @@
 name = "priotitize"
 version = "0.1.0"
 edition = "2021"
+repository = "https://github.com/MartinSkatvedt/prioritize-rs"
 
 [[bin]]
 name = "prioritize"
@@ -15,3 +16,8 @@ anyhow = "1"
 dirs = "5"
 chrono = "0.4"
 tui-textarea = { version = "0.7", features = ["crossterm"] }
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
