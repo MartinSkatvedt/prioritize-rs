@@ -42,7 +42,6 @@ fn run<B: ratatui::backend::Backend>(terminal: &mut Terminal<B>, app: &mut App) 
                 if key.kind != KeyEventKind::Press {
                     continue;
                 }
-                // Ctrl+C exits in all modes.
                 if key.code == KeyCode::Char('c')
                     && key.modifiers.contains(KeyModifiers::CONTROL)
                 {
@@ -52,6 +51,15 @@ fn run<B: ratatui::backend::Backend>(terminal: &mut Terminal<B>, app: &mut App) 
                     Mode::Normal => match key.code {
                         KeyCode::Char('q') => return Ok(()),
                         KeyCode::Char('n') => app.start_input(),
+                        KeyCode::Char('r') => app.start_edit_title(),
+                        KeyCode::Char('t') => app.start_edit_tags(),
+                        KeyCode::Char('/') => app.start_search(),
+                        KeyCode::Char('z')
+                            if key.modifiers.contains(KeyModifiers::CONTROL) =>
+                        {
+                            app.undo()?;
+                        }
+                        KeyCode::Esc => app.clear_filter(),
                         KeyCode::Tab => app.switch_focus(),
                         KeyCode::Down | KeyCode::Char('j') => app.move_selection_down(),
                         KeyCode::Up | KeyCode::Char('k') => app.move_selection_up(),
@@ -74,6 +82,31 @@ fn run<B: ratatui::backend::Backend>(terminal: &mut Terminal<B>, app: &mut App) 
                         KeyCode::Backspace => {
                             app.input.pop();
                         }
+                        _ => {}
+                    },
+                    Mode::EditTitle => match key.code {
+                        KeyCode::Enter => app.confirm_edit_title()?,
+                        KeyCode::Esc => app.cancel_edit_title(),
+                        KeyCode::Char(c) => app.input.push(c),
+                        KeyCode::Backspace => {
+                            app.input.pop();
+                        }
+                        _ => {}
+                    },
+                    Mode::EditTags => match key.code {
+                        KeyCode::Enter => app.confirm_edit_tags()?,
+                        KeyCode::Esc => app.cancel_edit_tags(),
+                        KeyCode::Char(c) => app.input.push(c),
+                        KeyCode::Backspace => {
+                            app.input.pop();
+                        }
+                        _ => {}
+                    },
+                    Mode::Search => match key.code {
+                        KeyCode::Enter => app.apply_search(),
+                        KeyCode::Esc => app.cancel_search(),
+                        KeyCode::Char(c) => app.search_push(c),
+                        KeyCode::Backspace => app.search_pop(),
                         _ => {}
                     },
                     Mode::EditNote => {

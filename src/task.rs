@@ -5,4 +5,5 @@ pub struct Task {
     pub done: bool,
     pub created_at: String,
     pub notes: String,
+    pub tags: Vec<String>,
 }
