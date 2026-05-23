@@ -1,0 +1,17 @@
+[package]
+name = "priotitize"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "prioritize"
+path = "src/main.rs"
+
+[dependencies]
+ratatui = "0.29"
+crossterm = "0.28"
+rusqlite = { version = "0.32", features = ["bundled"] }
+anyhow = "1"
+dirs = "5"
+chrono = "0.4"
+tui-textarea = { version = "0.7", features = ["crossterm"] }
