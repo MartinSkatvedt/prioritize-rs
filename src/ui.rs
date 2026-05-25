@@ -85,7 +85,7 @@ fn column_styles(focused: bool) -> (Style, Style) {
             .fg(Color::White)
             .add_modifier(Modifier::BOLD)
     } else {
-        Style::default().bg(Color::DarkGray)
+        Style::default().bg(Color::DarkGray).fg(Color::White)
     };
     (border, highlight)
 }
